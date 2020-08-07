@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "writhub"
+version = "0.1.0"
+description = "A static post generator, for when you don't feel like generating an entire site"
+authors = ["Dan Nguyen <dansonguyen@gmail.com>"]
+
+
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+lxml = "^4.5.2"
+cssselect = "^1.1.0"
+pypandoc = "^1.5"
+rich = "5.0.0"
+Jinja2 = "2.11"
+PyYaml = "^5.1"
+
+
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"

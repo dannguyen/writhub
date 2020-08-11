@@ -4,19 +4,8 @@ import re
 import subprocess
 from sys import argv, stderr
 
+from writhub.settings import COMPILE_HEADER, DEFAULT_COLLATED_FILENAME, IGNORE_DIR_PATTERNS, IGNORE_FILE_PATTERNS
 
-DEFAULT_COLLATED_FILENAME = 'index.md'
-
-
-IGNORE_DIR_PATTERNS = (
-    r'^_',
-)
-
-IGNORE_FILE_PATTERNS = (
-    DEFAULT_COLLATED_FILENAME,
-    r'^_.+\.md',
-    '.DS_Store',
-)
 
 
 
@@ -28,6 +17,7 @@ def collate_markdown_files(src, ignore_output_filename=DEFAULT_COLLATED_FILENAME
         valid *.md files found in `src_dir`
 
     TODO: have an option to not insert file break comments
+    TODO: ignore_output_filename edge cases handled/tested
     """
     if type(src) is list:
         src_paths = src
@@ -39,7 +29,7 @@ def collate_markdown_files(src, ignore_output_filename=DEFAULT_COLLATED_FILENAME
     else:
         raise ValueError(f"Expected src argument to be directory or list, not {type(src)}")
 
-    txt = ""
+    txt = f"{COMPILE_HEADER}\n"
     for path in src_paths:
         txt += f"\n<!-- [writhub-collation]: {path}  -->\n"
         txt += path.read_text()
@@ -50,8 +40,6 @@ def collate_markdown_files(src, ignore_output_filename=DEFAULT_COLLATED_FILENAME
 
 def insert_markdown_toc(src_path):
     subprocess.call(['markdown-toc', '-i', src_path,])
-
-
 
 
 

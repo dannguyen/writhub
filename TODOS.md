@@ -2,7 +2,22 @@
 
 ## General
 
+- [ ] Handle samples/post_w_assets situation
+
+- write some cli tests
+    - [ ] test post_w_assets
+    - [ ] test toc insertion
+
+- make Writhub class 
+
 - figure out logging situation
+    - how to set up logging to filter out by levels?
+- check out this writeup: https://medium.com/swlh/a-static-sites-generator-in-python-part-1-b2c421995ac1
+- read source code to git/hyde
+
+
+- [X] add "<!----compiled-by-writhub--- -->" comment to all Markdown/HTML as an easy way of avoiding compiled files. Check first 10 lines
+
 
 ## console/cli
 
@@ -14,8 +29,7 @@
 ### md subcommand
 
 - add options to `md` subcommand
-    - output_filename
-    - output_dir
+    - [x] output_path (either .md or dir)
     - --dry-run
 - cleanup and refactor `md` command, maybe into console/md
 

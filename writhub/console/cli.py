@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import click
 from pathlib import Path
-from writhub.settings import COMPILE_HEADER, DEFAULT_COLLATED_FILENAME
+from writhub.writhub import COMPILE_HEADER, DEFAULT_COLLATED_FILENAME
 
 from writhub.foo.md import collate_markdown_files, gather_markdown_paths
 

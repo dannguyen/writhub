@@ -1,5 +1,5 @@
 from writhub.foo.md import *
-from writhub.settings import COMPILE_HEADER
+from writhub.writhub import COMPILE_HEADER
 from pathlib import Path
 import pytest
 

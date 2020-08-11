@@ -4,7 +4,7 @@ import re
 import subprocess
 from sys import argv, stderr
 
-from writhub.settings import COMPILE_HEADER, DEFAULT_COLLATED_FILENAME, IGNORE_DIR_PATTERNS, IGNORE_FILE_PATTERNS
+from writhub.writhub import COMPILE_HEADER, DEFAULT_COLLATED_FILENAME, IGNORE_DIR_PATTERNS, IGNORE_FILE_PATTERNS
 
 
 

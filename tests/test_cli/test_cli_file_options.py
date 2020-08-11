@@ -4,7 +4,7 @@ from pathlib import Path
 import pytest
 
 from writhub.console.cli import main as maincli
-from writhub.settings import DEFAULT_COLLATED_FILENAME, COMPILE_HEADER
+from writhub.writhub import DEFAULT_COLLATED_FILENAME, COMPILE_HEADER
 
 runner = CliRunner()
 

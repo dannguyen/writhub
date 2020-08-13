@@ -4,25 +4,22 @@ import re
 from writhub.errors import *
 
 
-COMPILE_HEADER = '<!----compiled-by-writhub--- -->'
-DEFAULT_COLLATED_STEM = 'index'
-DEFAULT_COLLATED_FILENAME = f'{DEFAULT_COLLATED_STEM}.md' # TODO: deprecate
+COMPILE_HEADER = "<!----compiled-by-writhub--- -->"
+DEFAULT_COLLATED_STEM = "index"
+DEFAULT_COLLATED_FILENAME = f"{DEFAULT_COLLATED_STEM}.md"  # TODO: deprecate
 
 
-IGNORE_DIR_PATTERNS = (
-    r'^_',
-)
+IGNORE_DIR_PATTERNS = (r"^_",)
 
 IGNORE_FILE_PATTERNS = (
     DEFAULT_COLLATED_FILENAME,
-    r'^_.+\.md',
-    '.DS_Store',
+    r"^_.+\.md",
+    ".DS_Store",
 )
 
 
-
-class Writhub():
-    def __init__(self, mode='md', src_dir=None, output_path=None):
+class Writhub:
+    def __init__(self, mode="md", src_dir=None, output_path=None):
         self.mode = mode
         self.src_dir = Path(src_dir).resolve()
         if not self.src_dir.is_dir():
@@ -38,10 +35,7 @@ class Writhub():
         if not self.target_dir.exists():
             self.target_dir.mkdir(exist_ok=True, parents=True)
 
-
         Helpers.self_check(self)
-
-
 
 
 class Helpers(object):
@@ -51,40 +45,32 @@ class Helpers(object):
         if not self.src_dir.is_dir():
             raise WrithubIOError(f"src_dir is not a directory: {self.src_dir}")
 
-
     @staticmethod
     def get_source_paths(srcdir, mode):
-        return sorted(srcdir.glob(f'*.{mode}'))
-
-
+        return sorted(srcdir.glob(f"*.{mode}"))
 
     @staticmethod
     def get_target_from_output_path(output_path, mode):
-
         def _do_dir(xpath):
-            if xpath.is_dir():
-                # if the output path is an existing directory,
-                # set target_path to outdir/index.ext
-                booldir = True
-            elif xpath.is_file() or re.search(r'\.{}$'.format(mode), xpath.name):
-                # if output path is an existing file, or the name has expected file extension,
-                # then assume it's a valid destination and make its parent directory if necessary
+            if xpath.name == f"{xpath.stem}.{mode}" or xpath.is_file():
+                # automatically assume the target is meant to be a file
                 booldir = False
-            elif xpath.name == xpath.stem:
-                # if output_path is not file, and also seems to be a directory name
-                # then assume it's a target directory
+            elif xpath.is_dir() or (  # if the output path is an existing directory
+                not xpath.is_file() # or if output path is not file, but seems to be a dirname
+                and ((xpath.name[-1] == "/") or (xpath.name == xpath.stem))
+            ):
                 booldir = True
-            elif re.search(r'\.\w{1,10}$', xpath.name):
-                # assume it's a file path of weird file extension
+            elif re.search(r"\.\w{1,10}$", xpath.name):
+                # if output path has some kind of file extension
+                # then assume it's a valid destination
                 booldir = False
             else:
                 raise WrithubValueError(f"Unexpected type of output path: {xpath}")
             return booldir
 
-
         def _make_target(xpath):
             if _do_dir(xpath):
-                _basename = f'{DEFAULT_COLLATED_STEM}.{mode}'
+                _basename = f"{DEFAULT_COLLATED_STEM}.{mode}"
                 _dir = xpath
             else:
                 _basename = xpath.name
@@ -92,6 +78,5 @@ class Helpers(object):
 
             tpath = _dir.joinpath(_basename)
             return tpath
-
 
         return _make_target(output_path)

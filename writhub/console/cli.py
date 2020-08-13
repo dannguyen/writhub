@@ -6,6 +6,9 @@ from writhub.writhub import COMPILE_HEADER, DEFAULT_COLLATED_FILENAME
 from writhub.foo.md import collate_markdown_to_file, gather_markdown_paths
 from writhub.mylog import mylogger
 
+
+
+
 @click.group()
 def main():
     """
@@ -26,6 +29,12 @@ def foo():
     mylogger.critical("Critical oops")
     mylogger.error("An error appears!")
 
+    def _fubar(txt:str) -> int:
+        val = len(str(txt))
+        print("You gave me", txt, 'but i give you', val)
+        return val
+
+    _fubar(9)
 
 @main.command()
 @click.argument("src-dir", nargs=1, type=click.Path(exists=True, file_okay=False))

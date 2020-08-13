@@ -40,18 +40,20 @@ class Writhub:
 
 class Helpers(object):
     @staticmethod
-    def self_check(self):
+    def self_check(self:Writhub):
         """self file check"""
-        if not self.src_dir.is_dir():
-            raise WrithubIOError(f"src_dir is not a directory: {self.src_dir}")
+        pass
 
     @staticmethod
-    def get_source_paths(srcdir, mode):
+    def get_source_paths(srcdir:Path, mode:str) -> list:
         return sorted(srcdir.glob(f"*.{mode}"))
 
     @staticmethod
-    def get_target_from_output_path(output_path, mode):
-        def _do_dir(xpath):
+    def get_target_from_output_path(output_path:Path, mode:str) -> Path:
+        """
+
+        """
+        def _do_dir(xpath:Path) -> bool:
             if xpath.name == f"{xpath.stem}.{mode}" or xpath.is_file():
                 # automatically assume the target is meant to be a file
                 booldir = False
@@ -68,15 +70,12 @@ class Helpers(object):
                 raise WrithubValueError(f"Unexpected type of output path: {xpath}")
             return booldir
 
-        def _make_target(xpath):
-            if _do_dir(xpath):
-                _basename = f"{DEFAULT_COLLATED_STEM}.{mode}"
-                _dir = xpath
-            else:
-                _basename = xpath.name
-                _dir = xpath.parent
+        if _do_dir(output_path):
+            t_dir = output_path
+            t_basename = f"{DEFAULT_COLLATED_STEM}.{mode}"
+        else:
+            t_dir = output_path.parent
+            t_basename = output_path.name
 
-            tpath = _dir.joinpath(_basename)
-            return tpath
+        return t_dir.joinpath(t_basename)
 
-        return _make_target(output_path)

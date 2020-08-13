@@ -17,6 +17,7 @@ def srcdir(tmpdir):
     srcdir.joinpath('000-hello.md').write_text('# hey')
     return srcdir
 
+
 @pytest.fixture
 def targetdir(tmpdir):
     targetdir = Path(tmpdir).joinpath('targdir')
@@ -71,9 +72,31 @@ def nonexistent_dir(tmpdir):
     return xdir
 
 
+
 def test_writhub_init_with_nonexistent_src_dir(nonexistent_dir):
     with pytest.raises(WrithubIOError) as err:
         Writhub(src_dir=nonexistent_dir)
 
     assert str(nonexistent_dir) in str(err.value)
-    assert str('is not a directory') in str(err.value)
+    assert str('is not an existing directory') in str(err.value)
+
+
+def test_writehub_init_src_cannot_be_list(tmpdir):
+    with pytest.raises(TypeError) as err2:
+        Writhub(src_dir=['/tmp/foo.md'])
+
+    assert str('expected str') in str(err2.value)
+    assert str('not list') in str(err2.value)
+
+
+def test_writehub_init_src_cannot_be_existing_file_path(tmpdir):
+    srcfilepath = Path(tmpdir).joinpath('000-hello.md')
+    srcfilepath.parent.mkdir(exist_ok=True, parents=True)
+    srcfilepath.write_text("bad bad bad")
+
+    with pytest.raises(WrithubIOError) as err:
+        Writhub(src_dir=srcfilepath)
+
+    assert str(srcfilepath) in str(err.value)
+    assert str('must be a directory, not a file path') in str(err.value)
+

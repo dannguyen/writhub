@@ -1,10 +1,11 @@
 from pathlib import Path
 import re
+from typing import List as tList
 
 from writhub.errors import *
+from writhub.mylog import mylogger
 
-
-COMPILE_HEADER = "<!----compiled-by-writhub--- -->"
+WRITHUB_PROJECT_HEADER = "<!----collated-by-writhub--- -->"
 DEFAULT_COLLATED_STEM = "index"
 DEFAULT_COLLATED_FILENAME = f"{DEFAULT_COLLATED_STEM}.md"  # TODO: deprecate
 
@@ -18,22 +19,40 @@ IGNORE_FILE_PATTERNS = (
 )
 
 
-class Writhub:
+class Writhub(object):
+    """The object that handles file operations and logistics, i.e. project manager"""
     def __init__(self, mode="md", src_dir=None, output_path=None):
+        """
+        Attributes:
+            target_path (Path): file path to compile project into
+
+        Effects:
+            Creates the parent directory of `target_path`
+        """
+
         self.mode = mode
-        self.src_dir = Path(src_dir).resolve()
-        if not self.src_dir.is_dir():
-            raise WrithubIOError(f"src_dir is not a directory: {self.src_dir}")
 
-        self.src_paths = Helpers.get_source_paths(self.src_dir, self.mode)
+        # source resolution
+        try:
+            self.src_dir = Path(src_dir).resolve()
+        except TypeError as err:
+            raise err
+        else:
+            if self.src_dir.is_file():
+                raise WrithubIOError(f"src_dir must be a directory, not a file path: {self.src_dir}")
+            if not self.src_dir.is_dir():
+                raise WrithubIOError(f"src_dir is not an existing directory: {self.src_dir}")
 
+        self.content_list = Helpers.get_content_list(self.src_dir, self.mode)
+
+        # target path resolution
         _opath = Path(output_path).resolve() if output_path else self.src_dir
         self.target_path = Helpers.get_target_from_output_path(_opath, mode=self.mode)
         self.target_dir = self.target_path.parent
         self.target_basename = self.target_path.name
-
         if not self.target_dir.exists():
             self.target_dir.mkdir(exist_ok=True, parents=True)
+
 
         Helpers.self_check(self)
 
@@ -45,13 +64,32 @@ class Helpers(object):
         pass
 
     @staticmethod
-    def get_source_paths(srcdir:Path, mode:str) -> list:
-        return sorted(srcdir.glob(f"*.{mode}"))
+    def get_content_list(srcdir:Path, mode:str) -> tList[Path]:
+        """returns a list of alphabetically sorted source files that meet selection criteria"""
+        mypaths = []
+        for path in srcdir.glob(f"*.{mode}"):
+            if any(re.match(rx, path.name) for rx in IGNORE_FILE_PATTERNS):
+                mylogger.debug(f'{path} based on `IGNORE_FILE_PATTERNS`',  label="Ignoring")
+            elif any(re.match(rx, path.parent.name) for rx in IGNORE_DIR_PATTERNS):
+            # TODO: right now, only the parent directory is checked for ignored dir patterns
+                mylogger.debug(f'{path} based on `IGNORE_DIR_PATTERNS`',  label="Ignoring")
+            else:
+                mypaths.append(path)
+
+        # TODO: decide whether to sort by
+        return sorted(mypaths)
+
+
+
+
 
     @staticmethod
     def get_target_from_output_path(output_path:Path, mode:str) -> Path:
-        """
+        """Generates a target path, given an ostensible output path (file or directory)
+        and a mode (i.e. file extension)
 
+        Returns:
+            A file path, ostensibly for Writhub to compile stuff to a single file
         """
         def _do_dir(xpath:Path) -> bool:
             if xpath.name == f"{xpath.stem}.{mode}" or xpath.is_file():

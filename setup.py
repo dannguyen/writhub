@@ -18,13 +18,25 @@ kwargs = dict(
     author_email="dansonguyen@gmail.com",
     url="https://github.com/dannguyen/writhub",
     packages=["writhub"],
+    python_requires=">=3.7",
     install_requires=["click>=7.1.2",],
-    entry_points = {
-        'console_scripts': ['writhub=writhub.console.cli:main'],
-    },
     cmdclass={
         'npm_install_markdown_toc': NPMInstallMarkdownToc
     },
+    classifiers=[
+        'Environment :: Console',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        "Programming Language :: Python :: 3 :: Only",
+
+    ],
+
+
+    entry_points = {
+        'console_scripts': ['writhub=writhub.cli:main'],
+    },
+
 )
 
 

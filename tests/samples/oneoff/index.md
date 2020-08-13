@@ -1,4 +1,4 @@
-<!----compiled-by-writhub--- -->
+<!----collated-by-writhub--- -->
 
 <!-- [writhub-collation]: tests/samples/oneoff/000-hi.md  -->
 # hello world

@@ -18,7 +18,7 @@
 - read source code to git/hyde
 
 
-- [X] add "<!----compiled-by-writhub--- -->" comment to all Markdown/HTML as an easy way of avoiding compiled files. Check first 10 lines
+- [X] add "<!----collated-by-writhub--- -->" comment to all Markdown/HTML as an easy way of avoiding compiled files. Check first 10 lines
 
 
 ## console/cli

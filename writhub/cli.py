@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 import click
 from pathlib import Path
-from writhub.writhub import COMPILE_HEADER, DEFAULT_COLLATED_FILENAME
+from writhub.writhub import WRITHUB_PROJECT_HEADER, DEFAULT_COLLATED_FILENAME
+from writhub.writhub import Writhub
 
-from writhub.foo.md import collate_markdown_to_file, gather_markdown_paths
+from writhub.collaters.md import MarkdownCollater
 from writhub.mylog import mylogger
 
 
@@ -22,7 +23,7 @@ def foo():
     foo this is for foos!
     """
     mylogger.info("Welcome to writhub – a test")
-    mylogger.info('compile header:', COMPILE_HEADER)
+    mylogger.info('compile header:', WRITHUB_PROJECT_HEADER)
     mylogger.debug("A debug message")
     mylogger.info("Info for you")
     mylogger.warning("Warning for this")
@@ -47,32 +48,24 @@ def md(src_dir, output_path=None):
 
         $ writhub md tests/samples/post
     """
-    src_dir = Path(src_dir)
-    click.echo(f"Processing {src_dir}")
 
     # TK: this is just debug info/ remove gather_markdown_paths
-    srcpaths = gather_markdown_paths(src_dir)
-    mylogger.info(f"Found {len(srcpaths)} in {src_dir}")
-    mylogger.debug([str(s) for s in srcpaths])
+    mylogger.info(f"Processing {src_dir}")
+    hub = Writhub(mode='md', src_dir=src_dir, output_path=output_path)
 
-    if not output_path:
-        # then output dir is the src_dir
-        output_filename = DEFAULT_COLLATED_FILENAME
-        target_path = src_dir.joinpath(output_filename)
-    else:
-        output_path = Path(output_path)
-        if '.md' not in output_path.name: # then --output-path points to a directory
-            output_path = output_path.joinpath(DEFAULT_COLLATED_FILENAME)
 
-        target_path = output_path
+    mylogger.info(f"Found {len(hub.content_list)} files")
+    for i, p in enumerate(hub.content_list):
+        mylogger.debug(f"{i}: {p}")
+
         output_filename = output_path.name
 
-    # txt = collate_markdown_files(src_dir, ignore_output_filename=output_filename)
-    # target_path = src_dir + output_filename
-    # target_path.write_text(txt)
 
-    click.echo(f"Collating to {target_path}")
-    collate_markdown_to_file(src_dir, target_path, ignore_output_filename=output_filename)
+#   collate_markdown_to_file(src_dir, target_path, ignore_output_filename=output_filename)
+    hub.publish()
+    mylogger.info(f"Publishing to {hub.target_dir}")
+    mylogger.info(f"Collated file is at: {hub.target_path}")
+
 
 if __name__ == '__main__':
     main()

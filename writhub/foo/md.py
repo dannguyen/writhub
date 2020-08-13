@@ -2,14 +2,15 @@
 from pathlib import Path
 import re
 import subprocess
-from sys import argv, stderr
+from sys import argv
 
+from writhub.mylog import mylogger
 from writhub.writhub import COMPILE_HEADER, DEFAULT_COLLATED_FILENAME, IGNORE_DIR_PATTERNS, IGNORE_FILE_PATTERNS
 
 
 
 
-def collate_markdown_files(src, ignore_output_filename=DEFAULT_COLLATED_FILENAME, options={}):
+def collate_markdown_files(src, **kwargs): # ignore_output_filename=DEFAULT_COLLATED_FILENAME, ):
     """
     src_path <Path or list of paths>
 
@@ -39,6 +40,8 @@ def collate_markdown_files(src, ignore_output_filename=DEFAULT_COLLATED_FILENAME
 
 
 def insert_markdown_toc(src_path):
+
+    mylogger.info(f"Inserting TOC into {src_path}")
     subprocess.call(['markdown-toc', '-i', src_path,])
 
 
@@ -63,7 +66,7 @@ def gather_markdown_paths(src_dir):
 
 
 
-def collate_to_file(src_dir, target_path, options={}):
+def collate_markdown_to_file(src_dir, target_path, **kwargs):
     """
     all in one method that given a src_dir and a target_path,
     creates the new collated markdown file and does postprocessing,
@@ -78,7 +81,7 @@ def collate_to_file(src_dir, target_path, options={}):
         target_dir.mkdir(exist_ok=True, parents=True)
 
 
-    txt = collate_markdown_files(src_dir, options=options)
+    txt = collate_markdown_files(src_dir, **kwargs)
 
     target_path.write_text(txt)
 
@@ -92,6 +95,6 @@ if __name__ == '__main__':
         src_dir = Path(argv[1])
         target_path = src_dir.joinpath(DEFAULT_COLLATED_FILENAME)
 
-    stderr.write(f"Reading from {src_dir} \n")
+    mylogger.info(f"Reading from {src_dir}")
     collate_to_file(src_dir, target_path)
-    stderr.write(f"Wrote to {target_path} \n")
+    mylogger.info(f"Wrote to {target_path}")

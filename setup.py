@@ -11,8 +11,8 @@ class NPMInstallMarkdownToc(build_py):
 
 kwargs = dict(
     name="writhub",
-    license="WHAT",
-    version="0.0.0.1",
+    license="whatever",
+    version="0.0.0.2",
     description="A static post generator, for when you don't feel like generating an entire site",
     author="Dan Nguyen",
     author_email="dansonguyen@gmail.com",

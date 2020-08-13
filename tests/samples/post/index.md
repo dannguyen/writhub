@@ -1,3 +1,5 @@
+<!----compiled-by-writhub--- -->
+
 <!-- [writhub-collation]: tests/samples/post/000-hello.md  -->
 # Hello There
 

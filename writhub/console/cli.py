@@ -3,7 +3,8 @@ import click
 from pathlib import Path
 from writhub.writhub import COMPILE_HEADER, DEFAULT_COLLATED_FILENAME
 
-from writhub.foo.md import collate_markdown_files, gather_markdown_paths
+from writhub.foo.md import collate_markdown_to_file, gather_markdown_paths
+from writhub.mylog import mylogger
 
 @click.group()
 def main():
@@ -17,7 +18,13 @@ def foo():
     """
     foo this is for foos!
     """
-    click.echo(COMPILE_HEADER)
+    mylogger.info("Welcome to writhub – a test")
+    mylogger.info('compile header:', COMPILE_HEADER)
+    mylogger.debug("A debug message")
+    mylogger.info("Info for you")
+    mylogger.warning("Warning for this")
+    mylogger.critical("Critical oops")
+    mylogger.error("An error appears!")
 
 
 @main.command()
@@ -33,9 +40,11 @@ def md(src_dir, output_path=None):
     """
     src_dir = Path(src_dir)
     click.echo(f"Processing {src_dir}")
+
+    # TK: this is just debug info/ remove gather_markdown_paths
     srcpaths = gather_markdown_paths(src_dir)
-    click.echo(f"Found {len(srcpaths)} in {src_dir}")
-    click.echo([str(s) for s in srcpaths])
+    mylogger.info(f"Found {len(srcpaths)} in {src_dir}")
+    mylogger.debug([str(s) for s in srcpaths])
 
     if not output_path:
         # then output dir is the src_dir
@@ -49,12 +58,12 @@ def md(src_dir, output_path=None):
         target_path = output_path
         output_filename = output_path.name
 
-    txt = collate_markdown_files(src_dir, ignore_output_filename=output_filename)
-
+    # txt = collate_markdown_files(src_dir, ignore_output_filename=output_filename)
     # target_path = src_dir + output_filename
-    click.echo(f"Collating to {target_path}")
+    # target_path.write_text(txt)
 
-    target_path.write_text(txt)
+    click.echo(f"Collating to {target_path}")
+    collate_markdown_to_file(src_dir, target_path, ignore_output_filename=output_filename)
 
 if __name__ == '__main__':
     main()

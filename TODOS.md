@@ -2,6 +2,10 @@
 
 ## General
 
+- [X] Priority: figure out logging situation
+    - [X] remove manual stderr
+    - [X] how to set up logging to filter out by levels?
+- [ ] set up cli to have general verbose option
 - [ ] Handle samples/post_w_assets situation
 
 - write some cli tests
@@ -10,8 +14,6 @@
 
 - make Writhub class 
 
-- figure out logging situation
-    - how to set up logging to filter out by levels?
 - check out this writeup: https://medium.com/swlh/a-static-sites-generator-in-python-part-1-b2c421995ac1
 - read source code to git/hyde
 

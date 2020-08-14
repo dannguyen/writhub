@@ -11,7 +11,6 @@ runner = CliRunner()
 SRC_DIR_ONEOFF = Path('./examples/oneoff/')
 
 
-@pytest.mark.skip(reason="Obsolete")
 def test_main_hello():
     result = runner.invoke(maincli)
     assert result.exit_code == 0
@@ -19,7 +18,7 @@ def test_main_hello():
     assert '--help' in result.output
 
 
-@pytest.mark.skip(reason="Obsolete")
+@pytest.mark.janky()
 def test_specified_src_dir_and_default_output_path(tmpdir):
     src_dir = Path(tmpdir).joinpath('hey/you')
     src_dir.mkdir(exist_ok=True, parents=True)
@@ -34,7 +33,7 @@ def test_specified_src_dir_and_default_output_path(tmpdir):
     # assert 'xxx' in result.output
 
 
-@pytest.mark.skip(reason="Obsolete")
+@pytest.mark.janky()
 def test_specified_output_path(tmpdir):
     targ_dir = Path(tmpdir).joinpath('hey/you')
     targ_dir.mkdir(exist_ok=True, parents=True)
@@ -47,8 +46,8 @@ def test_specified_output_path(tmpdir):
 
 
 
-@pytest.mark.skip(reason="Obsolete")
-def test_specified_output_dir(tmpdir):
+@pytest.mark.janky()
+def test_specified_output_path_as_dir(tmpdir):
     targ_dir = Path(tmpdir).joinpath('hey/path')
     targ_dir.mkdir(exist_ok=True, parents=True)
     targ_path = targ_dir.joinpath(DEFAULT_COLLATED_FILENAME)

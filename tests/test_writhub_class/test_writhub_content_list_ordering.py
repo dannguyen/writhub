@@ -17,6 +17,7 @@ def content(tmpdir):
     ct['dir'].mkdir(exist_ok=True, parents=True)
 
     for bname in (
+                'assets/asset.md',
                 'ignore.me', 'not.content.file',
                 '000-hello.md',
                 '100-world.md', '400-alpha.md',
@@ -24,7 +25,8 @@ def content(tmpdir):
                 '200.md',
                 '400-zeta_zed.md',
                 'index.md',
-                '_500-what.md',):
+                '_500-what.md',
+                '_drafts/draft.md',):
 
         p = ct['dir'].joinpath(bname)
         p.parent.mkdir(parents=True, exist_ok=True)
@@ -36,17 +38,23 @@ def content(tmpdir):
 def hub(content, targetdir):
     return Writhub(mode='md', src_dir=content['dir'], output_path=targetdir)
 
+@pytest.fixture
+def clist(hub):
+    return hub.content_list
 
-def test_content_list_ignores_files_without_proper_mode_eg_md(hub):
-    clist = hub.content_list
+
+def test_content_list_ignores_files_without_proper_mode_eg_md(clist):
     assert all('ignore.me' not in c.name for c in clist)
     assert all('not.content.file' not in c.name for c in clist)
 
 
-def test_content_list_ignores_file_patterns(hub):
-    clist = hub.content_list
+def test_content_list_ignores_file_patterns(clist):
     assert all('index.md' not in c.name for c in clist)
     assert all('_500-what.md' not in c.name for c in clist)
+
+def test_content_list_ignores_dir_patterns(clist):
+    assert all('_drafts/draft.md' not in str(c) for c in clist)
+    assert all('assets/asset.md' not in str(c) for c in clist)
 
 
 
@@ -57,13 +65,11 @@ def test_content_list_ignores_target_path_explicitly(hub):
 
 #### Sorting
 
-def test_sort_content_list_first_and_last(hub):
-    clist = hub.content_list
+def test_sort_content_list_first_and_last(clist):
     assert clist[0].name == '000-hello.md'
     assert clist[-1].name == '400-zeta_zed.md'
 
-def test_sort_content_list_subfolder_sort(hub):
-    clist = hub.content_list
+def test_sort_content_list_subfolder_sort(clist):
     assert clist[-2].name == '400-alpha.md'
     assert clist[1].name == '100-world.md'
     assert clist[2].name == '200.md'

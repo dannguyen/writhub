@@ -65,5 +65,24 @@ def md(src_dir, output_path=None):
     mylogger.info(f"Collated file is at: {hub.target_path}")
 
 
+
+@main.command()
+@click.argument("src-dir", nargs=1, type=click.Path(exists=True, file_okay=False))
+@click.option("--output-path", "-o", type=click.Path(file_okay=True, dir_okay=True), default=None)
+def txt(src_dir, output_path=None):
+    mylogger.info(f"Processing {src_dir}")
+    hub = Writhub(mode='txt', src_dir=src_dir, output_path=output_path)
+
+
+    mylogger.info(f"Found {len(hub.content_list)} files")
+    for i, p in enumerate(hub.content_list):
+        mylogger.debug(f"{i}: {p}")
+
+    hub.publish()
+    mylogger.info(f"Publishing to {hub.target_dir}")
+    mylogger.info(f"Collated file is at: {hub.target_path}")
+
+
+
 if __name__ == '__main__':
     main()

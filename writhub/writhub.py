@@ -1,5 +1,6 @@
 from pathlib import Path
 import re
+import subprocess
 from typing import NoReturn, List as tList
 
 from writhub.errors import *
@@ -25,7 +26,7 @@ class Writhub(object):
         self.published = False
         # source resolution
         try:
-            self.src_dir = Path(src_dir).resolve()
+            self.src_dir = Path(src_dir).expanduser().resolve()
         except TypeError as err:
             raise err
         else:
@@ -37,7 +38,7 @@ class Writhub(object):
         self.content_list = Helpers.get_content_list(self.src_dir, self.mode)
 
         # target path resolution
-        _opath = Path(output_path).resolve() if output_path else self.src_dir
+        _opath = Path(output_path).expanduser().resolve() if output_path else self.src_dir
         self.target_path = Helpers.get_target_from_output_path(_opath, mode=self.mode)
         self.target_dir = self.target_path.parent
         self.target_basename = self.target_path.name
@@ -58,12 +59,19 @@ class Writhub(object):
     def publish(self)  -> NoReturn:
         """makes content!"""
         self.__collate()
+        Helpers.sync_subdir(self.src_dir, self.src_dir.joinpath('assets'), self.target_dir)
         self.published = True
+
+
 
 class Helpers(object):
     @staticmethod
     def self_check(self:Writhub):
         """self file check"""
+        mylogger.debug(f"src_dir: {self.src_dir}")
+        mylogger.debug(f"target_dir: {self.target_dir}")
+        mylogger.debug(f"target_path: {self.target_path}")
+
         pass
 
     @staticmethod
@@ -118,3 +126,31 @@ class Helpers(object):
 
         return t_dir.joinpath(t_basename)
 
+
+    @staticmethod
+    def sync_subdir(src_dir:Path, src_subdir:Path, target_dir:Path, ):
+        """
+        contents of `src_subdir` is rsynced to `target_dir`/subdir, where
+            subdir is src_subdir relative to src_dir
+
+        Example
+        -------
+        src_dir:    /tmp/foo/home
+        src_subdir: /tmp/foo/home/assets or ./assets
+        target_dir: ./dest/
+
+        Contents of /tmp/foo/home/assets are
+            synced to: dest/assets
+        """
+
+        reldir = src_subdir.relative_to(src_dir)
+        _from = str(src_subdir.joinpath(src_subdir)).rstrip('/') + '/'
+        _to = str(target_dir.joinpath(reldir)).rstrip('/')
+
+        mylogger.debug(f"{_from} to {_to}", label="rSyncing")
+        proc = subprocess.call(['rsync', '-a', '-m', _from, _to])
+        return proc
+
+
+#        proc = subprocess.call(['rsync', '-a', '-m', '--exclude', RSYNC_EXCLUDED, src, target])
+#             pubstr = str(_pubdir.joinpath(subdir.name)).rstrip('/')

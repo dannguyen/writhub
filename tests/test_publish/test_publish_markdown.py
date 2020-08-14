@@ -6,7 +6,7 @@ from writhub.errors import *
 
 from pathlib import Path
 import pytest
-
+import re
 
 @pytest.fixture
 def srcdir(tmpdir):
@@ -34,6 +34,24 @@ def hub(_writhub):
     return _writhub
 
 
-def test_publish_file_has_markdown_toc(hub):
-    txt = hub.target_path.read_text()
-    assert '- [Hello](#hello)' in txt
+@pytest.fixture
+def pubtext(hub):
+    return hub.target_path.read_text()
+
+def test_publish_has_expected_attrs(hub):
+    assert type(hub.collated_text) is str
+    assert hub.published is True
+
+    assert hub.mode == 'md'
+    assert hub.src_dir == hub.target_dir
+    assert hub.target_path.name == 'index.md'
+
+def test_publish_markdown_has_meta(pubtext):
+    line = pubtext.splitlines()[0]
+    assert WRITHUB_PROJECT_HEADER == line
+    assert re.search(f'<!---{DEFAULT_COLLATION_MARKER}.+?000-hello.md', pubtext)
+
+
+
+def test_publish_file_has_markdown_toc(pubtext):
+    assert '- [Hello](#hello)' in pubtext

@@ -24,7 +24,6 @@ class TextCollater(object):
     def insert_toc(self, filepath:Path) -> Path:
         mylogger.info(f"Inserting TOC into {filepath}")
         return filepath
-        pass
 
     # TODO: move page_collation markup into its own method
     @staticmethod
@@ -43,19 +42,29 @@ class TextCollater(object):
 
         TODO: have an option to not insert file break comments
         TODO: ignore_output_filename edge cases handled/tested
+        TODO: # ignore_output_filename=DEFAULT_COLLATED_FILENAME, ):
         """
-        # ignore_output_filename=DEFAULT_COLLATED_FILENAME, ):
         if not all(issubclass(type(p), Path) for p in src_paths):
             raise ValueError(f"Expected `src_paths` to be a collection of file paths")
 
+        _cwd = Path('.').resolve()
+        def _mark_txt(txt:str, path:Path) -> str:
+            try:
+                relpath = path.relative_to(_cwd)
+            except ValueError:
+                relpath = path
 
-        txt = ""
+            header = f"\n<!---{collation_marker} {relpath} -->\n"
+            footer = f"\n<!---/{collation_marker} {relpath} -->\n"
+            return header + txt + footer
+
+
+
+        colltxt = ""
         for path in src_paths:
-            pagetxt = path.read_text()
-            if make_mark:
-                pagetxt = f"\n<!---{collation_marker} {path} -->\n" + pagetxt + f"\n<!---/{collation_marker} {path} -->\n"
-            txt += pagetxt
+            txt = path.read_text()
+            colltxt += _mark_txt(txt, path)  if make_mark else txt0
 
-        return txt
+        return colltxt
 
 

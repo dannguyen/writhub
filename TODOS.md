@@ -2,24 +2,26 @@
 
 ## Priority leftovers
 
-- [ ] MarkdownCollater should add TOC to file
-- [ ] fix cli_file_options tests
-- [ ] Writhub.publish should rsync assets/ subdirectory
+- [?] Writhub.publish should rsync assets/ subdirectory
+    - [x] simple test passed
+    - [ ] test for only assets/ subdir is copied (for now)
+    - [ ] test for validity of file contents
+- [ ] Prevent rsyncing when src_dir and target_dir are the same
+- [ ] Writhub should find assets subdirectory and add it as an attribute
+    - [ ] what's purpose of writhub.settings.ASSETS_DIRECTORY_PATTEN?
 - [ ] Writhub.publish should not wreck wreck src_dir if target_dir is the same
 
 
-- [ ] Figure out how to use markdown-toc to generate toc to be captured via stdout?
+- [?] MarkdownCollater should add TOC to file
+    - but kind of slow
+    - should investigate how markdown-toc works
+    - [ ] Figure out how to use markdown-toc to generate toc to be captured via stdout?
 
 
 ## General
 
 - [ ] set up cli to have general verbose option
-- [ ] Handle samples/post_w_assets situation
 
-
-- [X] figure out logging situation
-    - [X] remove manual stderr
-    - [X] how to set up logging to filter out by levels?
 
 
 - write some cli tests
@@ -32,8 +34,23 @@
 - read source code to git/hyde
 
 
+--------------------
+
+# Done
+
+- [X] fix cli_file_options tests
 - [X] add "<!----collated-by-writhub--- -->" comment to all Markdown/HTML as an easy way of avoiding compiled files. Check first 10 lines
 
+General
+- [X] figure out logging situation
+    - [X] remove manual stderr
+    - [X] how to set up logging to filter out by levels?
+
+
+---------------------
+
+
+# Other stuff
 
 ## console/cli
 

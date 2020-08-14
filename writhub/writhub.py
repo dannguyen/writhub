@@ -1,27 +1,18 @@
 from pathlib import Path
 import re
-from typing import List as tList
+from typing import NoReturn, List as tList
 
 from writhub.errors import *
 from writhub.mylog import mylogger
+from writhub.settings import *
 
-WRITHUB_PROJECT_HEADER = "<!----collated-by-writhub--- -->"
-DEFAULT_COLLATED_STEM = "index"
-DEFAULT_COLLATED_FILENAME = f"{DEFAULT_COLLATED_STEM}.md"  # TODO: deprecate
+from writhub.collaters import get_collater_type
 
-
-IGNORE_DIR_PATTERNS = (r"^_",)
-
-IGNORE_FILE_PATTERNS = (
-    DEFAULT_COLLATED_FILENAME,
-    r"^_.+\.md",
-    ".DS_Store",
-)
 
 
 class Writhub(object):
     """The object that handles file operations and logistics, i.e. project manager"""
-    def __init__(self, mode="md", src_dir=None, output_path=None):
+    def __init__(self, mode="md", src_dir=None, output_path=None, **kwargs):
         """
         Attributes:
             target_path (Path): file path to compile project into
@@ -31,7 +22,8 @@ class Writhub(object):
         """
 
         self.mode = mode
-
+        self.collated_text = None
+        self.published = False
         # source resolution
         try:
             self.src_dir = Path(src_dir).resolve()
@@ -53,9 +45,20 @@ class Writhub(object):
         if not self.target_dir.exists():
             self.target_dir.mkdir(exist_ok=True, parents=True)
 
-
         Helpers.self_check(self)
 
+
+    def inner_collate(self) -> NoReturn:
+        """produces a text file!"""
+        collater = get_collater_type(self.mode)()
+        ctxt = collater.collate(self.content_list,)
+        self.collated_text = WRITHUB_PROJECT_HEADER + "\n" + ctxt
+        self.target_path.write_text(self.collated_text)
+
+    def publish(self)  -> NoReturn:
+        """makes content!"""
+        self.inner_collate()
+        self.published = True
 
 class Helpers(object):
     @staticmethod
@@ -78,8 +81,6 @@ class Helpers(object):
 
         # TODO: decide whether to sort by
         return sorted(mypaths)
-
-
 
 
 

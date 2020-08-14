@@ -58,8 +58,6 @@ def md(src_dir, output_path=None):
     for i, p in enumerate(hub.content_list):
         mylogger.debug(f"{i}: {p}")
 
-        output_filename = output_path.name
-
 
 #   collate_markdown_to_file(src_dir, target_path, ignore_output_filename=output_filename)
     hub.publish()

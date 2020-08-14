@@ -1,12 +1,26 @@
 # TODOS
 
+## Priority leftovers
+
+- [ ] MarkdownCollater should add TOC to file
+- [ ] fix cli_file_options tests
+- [ ] Writhub.publish should rsync assets/ subdirectory
+- [ ] Writhub.publish should not wreck wreck src_dir if target_dir is the same
+
+
+- [ ] Figure out how to use markdown-toc to generate toc to be captured via stdout?
+
+
 ## General
 
-- [X] Priority: figure out logging situation
-    - [X] remove manual stderr
-    - [X] how to set up logging to filter out by levels?
 - [ ] set up cli to have general verbose option
 - [ ] Handle samples/post_w_assets situation
+
+
+- [X] figure out logging situation
+    - [X] remove manual stderr
+    - [X] how to set up logging to filter out by levels?
+
 
 - write some cli tests
     - [ ] test post_w_assets

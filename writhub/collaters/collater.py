@@ -21,7 +21,7 @@ class TextCollater(object):
         return txt
 
 
-    def insert_toc(filepath:Path) -> Path:
+    def insert_toc(self, filepath:Path) -> Path:
         mylogger.info(f"Inserting TOC into {filepath}")
         return filepath
         pass

@@ -1,12 +1,10 @@
 # Hello There
 
-Just a sample arrangement of markdown files. Check out the compiled result in `tests/samples/post/index.md`
+Just a sample arrangement of markdown files. Check out the compiled result in `examples/post/index.md`
 
 **Table of contents**
 
-<!-- toc -->
-
-<!-- tocstop -->
+<!-- toc --><!-- tocstop -->
 
 
 

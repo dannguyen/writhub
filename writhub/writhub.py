@@ -20,7 +20,6 @@ class Writhub(object):
         Effects:
             Creates the parent directory of `target_path`
         """
-
         self.mode = mode
         self.collated_text = None
         self.published = False
@@ -48,16 +47,17 @@ class Writhub(object):
         Helpers.self_check(self)
 
 
-    def inner_collate(self) -> NoReturn:
+    def __collate(self) -> NoReturn:
         """produces a text file!"""
         collater = get_collater_type(self.mode)()
         ctxt = collater.collate(self.content_list,)
         self.collated_text = WRITHUB_PROJECT_HEADER + "\n" + ctxt
         self.target_path.write_text(self.collated_text)
+        collater.insert_toc(self.target_path)
 
     def publish(self)  -> NoReturn:
         """makes content!"""
-        self.inner_collate()
+        self.__collate()
         self.published = True
 
 class Helpers(object):

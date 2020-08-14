@@ -8,7 +8,7 @@ from writhub.writhub import DEFAULT_COLLATED_FILENAME, WRITHUB_PROJECT_HEADER
 
 runner = CliRunner()
 
-SRC_DIR_ONEOFF = Path('./tests/samples/oneoff/')
+SRC_DIR_ONEOFF = Path('./examples/oneoff/')
 
 
 @pytest.mark.skip(reason="Obsolete")

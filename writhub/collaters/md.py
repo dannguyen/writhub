@@ -6,10 +6,13 @@ from sys import argv
 
 from writhub.collaters import TextCollater
 
+TOC_MARKER = ('<!-- toc -->','<!-- tocstop -->')
+toc_marker = ''.join(TOC_MARKER)
+
 class MarkdownCollater(TextCollater):
     def insert_toc(self, src_path:Path):
-        super(src_path)
         subprocess.call(['markdown-toc', '-i', src_path,])
+        return super().insert_toc(src_path)
 
 
 

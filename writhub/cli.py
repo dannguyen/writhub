@@ -46,7 +46,7 @@ def md(src_dir, output_path=None):
 
     Example:
 
-        $ writhub md tests/samples/post
+        $ writhub md examples/post
     """
 
     # TK: this is just debug info/ remove gather_markdown_paths

@@ -6,17 +6,21 @@
     - [x] simple test passed
     - [ ] test for only assets/ subdir is copied (for now)
     - [ ] test for validity of file contents
-- [ ] Prevent rsyncing when src_dir and target_dir are the same
+- [x] Prevent rsyncing when src_dir and target_dir are the same
+- [ ] Prevent rsyncing when there is no assets/ dir
 - [ ] Writhub should find assets subdirectory and add it as an attribute
     - [ ] what's purpose of writhub.settings.ASSETS_DIRECTORY_PATTEN?
-- [ ] Writhub.publish should not wreck wreck src_dir if target_dir is the same
+- [ ] Writhub.publish should not wreck src_dir if target_dir is the same
 
 
 - [?] MarkdownCollater should add TOC to file
     - but kind of slow
     - should investigate how markdown-toc works
     - [ ] Figure out how to use markdown-toc to generate toc to be captured via stdout?
+    - [ ] Make better use of subprocess.run https://docs.python.org/3/library/subprocess.html
 
+- Collater
+    - necessary to have a closing collation marker?
 
 ## General
 

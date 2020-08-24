@@ -55,7 +55,7 @@ class TextCollater(object):
                 relpath = path
 
             header = f"\n<!---{collation_marker} {relpath} -->\n"
-            footer = f"\n<!---/{collation_marker} {relpath} -->\n"
+            footer = f"\n\n<!---/{collation_marker} {relpath} -->\n\n\n"
             return header + txt + footer
 
 

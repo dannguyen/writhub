@@ -25,12 +25,12 @@ class MyLogger(object):
         @classmethod
         def _fmt(cls, decorated):
             def wrap(cls, *args, **kwargs):
-                # labeltxt = f"{kwargs['label']}: " if kwargs.get('label') else ""
+                labeltxt = f"{kwargs['label']}: " if kwargs.get('label') else ""
                 if len(args) == 1:
                     msg = args[0]
                 else:
                     msg = ' '.join(str(a) for a in args)
-                # msg = f"{labeltxt}{msg}"
+                msg = f"{labeltxt}{msg}"
                 decorated(cls, msg, **kwargs)
             return wrap
 

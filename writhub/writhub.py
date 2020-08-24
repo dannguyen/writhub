@@ -10,7 +10,6 @@ from writhub.settings import *
 from writhub.collaters import get_collater_type
 
 
-
 class Writhub(object):
     """The object that handles file operations and logistics, i.e. project manager"""
     def __init__(self, mode="md", src_dir=None, output_path=None, **kwargs):
@@ -48,6 +47,23 @@ class Writhub(object):
         Helpers.self_check(self)
 
 
+    def src_assets_dir(self) -> (Path, False):
+        apath = self.src_dir.joinpath(DEFAULT_ASSETS_DIRNAME)
+        if apath.is_dir():
+            return apath
+        else:
+            return False
+
+    def target_assets_dir(self) -> (Path, False):
+        apath = self.src_assets_dir()
+        if apath:
+            tpath = self.target_dir.joinpath(apath.name)
+            return tpath
+        else:
+            return False
+
+
+
     def __collate(self) -> NoReturn:
         """produces a text file!"""
         collater = get_collater_type(self.mode)()
@@ -59,9 +75,10 @@ class Writhub(object):
     def publish(self)  -> NoReturn:
         """makes content!"""
         self.__collate()
-        Helpers.sync_subdir(self.src_dir, self.src_dir.joinpath('assets'), self.target_dir)
+        assetsdir = self.src_assets_dir()
+        if assetsdir:
+            Helpers.sync_subdir(self.src_dir, assetsdir, self.target_dir)
         self.published = True
-
 
 
 class Helpers(object):
@@ -147,9 +164,13 @@ class Helpers(object):
         _from = str(src_subdir.joinpath(src_subdir)).rstrip('/') + '/'
         _to = str(target_dir.joinpath(reldir)).rstrip('/')
 
-        mylogger.debug(f"{_from} to {_to}", label="rSyncing")
-        proc = subprocess.call(['rsync', '-a', '-m', _from, _to])
-        return proc
+
+        if _from == _to + '/':
+            mylogger.debug(f"_from and _to are the same: {_from}", label="skip rSyncing")
+        else:
+            mylogger.debug(f"{_from} to {_to}", label="rSyncing")
+            proc = subprocess.call(['rsync', '-a', '-m', _from, _to])
+            return proc
 
 
 #        proc = subprocess.call(['rsync', '-a', '-m', '--exclude', RSYNC_EXCLUDED, src, target])

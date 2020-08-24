@@ -14,4 +14,7 @@ Lorem ipsum dolor sit amet!
 
 Read my memo: [assets/hey.txt](assets/hey.txt)
 
+
 <!---/writhub-collated-page examples/assets_simple/000-hello.md -->
+
+

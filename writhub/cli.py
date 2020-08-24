@@ -60,8 +60,8 @@ def md(src_dir, output_path=None):
 
 
 #   collate_markdown_to_file(src_dir, target_path, ignore_output_filename=output_filename)
-    hub.publish()
     mylogger.info(f"Publishing to {hub.target_dir}")
+    hub.publish()
     mylogger.info(f"Collated file is at: {hub.target_path}")
 
 

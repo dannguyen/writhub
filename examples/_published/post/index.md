@@ -45,7 +45,10 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim at impedit, quos 
 2. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed id, labore asperiores qui porro totam architecto quis neque quisquam laudantium. Consequatur corrupti, eaque commodi nihil, quidem fugit explicabo provident possimus?
 3. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure earum molestiae, voluptates nisi consectetur debitis, architecto maiores ab dolor ea unde deserunt cupiditate sed, soluta voluptatum minima libero, est nam!
 
+
 <!---/writhub-collated-page examples/post/000-hello.md -->
+
+
 
 <!---writhub-collated-page examples/post/010-goodbye.md -->
 
@@ -65,4 +68,7 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut quam voluptates ani
 
 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Et repellendus, eos quia odio, iusto vitae repellat, laboriosam ipsa, quasi soluta beatae placeat accusamus. Dicta earum rem quidem fuga, laborum mollitia.
 
+
 <!---/writhub-collated-page examples/post/010-goodbye.md -->
+
+

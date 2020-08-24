@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "writhub"
-version = "0.0.0.2"
+version = "0.0.1"
 description = "A static post generator, for when you don't feel like generating an entire site"
 authors = ["Dan Nguyen <dansonguyen@gmail.com>"]
 
